@@ -132,26 +132,109 @@
             </div>
         </section>
 
-        <!-- Before & After Slider Section -->
+        <!-- Before & After Carousel Section -->
         <section id="transformations" class="transformations bg-primary">
             <div class="container">
                 <h2 class="section-title text-white">Magie proměny</h2>
                 <p class="section-desc text-white">Podívejte se, co dokáže precizní střih a správně zvolená barva. Použijte posuvník a porovnejte výsledek před a po.</p>
-                
-                <div class="comparison-slider reveal">
-                    <div class="image-container">
-                        <img class="img-before" src="assets/before.png" alt="Před proměnou">
-                        <div class="img-after-wrapper">
-                            <img class="img-after" src="assets/after.png" alt="Po proměně">
+
+                <div class="carousel-wrapper reveal">
+                    <!-- Carousel Track -->
+                    <div class="carousel-track">
+
+                        <!-- Slide 1 -->
+                        <div class="carousel-slide active">
+                            <div class="slide-label">Proměna #1 — Dámský střih</div>
+                            <div class="image-container">
+                                <img class="img-before" src="assets/before.png" alt="Před proměnou">
+                                <div class="img-after-wrapper">
+                                    <img class="img-after" src="assets/after.png" alt="Po proměně">
+                                </div>
+                                <div class="slider-handle">
+                                    <span class="handle-arrow left">‹</span>
+                                    <span class="handle-arrow right">›</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="slider-handle">
-                            <span class="handle-arrow left">‹</span>
-                            <span class="handle-arrow right">›</span>
+
+                        <!-- Slide 2 -->
+                        <div class="carousel-slide">
+                            <div class="slide-label">Proměna #2 — Bob střih</div>
+                            <div class="image-container">
+                                <img class="img-before" src="assets/before.png" alt="Před proměnou">
+                                <div class="img-after-wrapper">
+                                    <img class="img-after" src="assets/after.png" alt="Po proměně">
+                                </div>
+                                <div class="slider-handle">
+                                    <span class="handle-arrow left">‹</span>
+                                    <span class="handle-arrow right">›</span>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- Slide 3 -->
+                        <div class="carousel-slide">
+                            <div class="slide-label">Proměna #3 — Pánský fade</div>
+                            <div class="image-container">
+                                <img class="img-before" src="assets/before.png" alt="Před proměnou">
+                                <div class="img-after-wrapper">
+                                    <img class="img-after" src="assets/after.png" alt="Po proměně">
+                                </div>
+                                <div class="slider-handle">
+                                    <span class="handle-arrow left">‹</span>
+                                    <span class="handle-arrow right">›</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 4 -->
+                        <div class="carousel-slide">
+                            <div class="slide-label">Proměna #4 — Barvení</div>
+                            <div class="image-container">
+                                <img class="img-before" src="assets/before.png" alt="Před proměnou">
+                                <div class="img-after-wrapper">
+                                    <img class="img-after" src="assets/after.png" alt="Po proměně">
+                                </div>
+                                <div class="slider-handle">
+                                    <span class="handle-arrow left">‹</span>
+                                    <span class="handle-arrow right">›</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 5 -->
+                        <div class="carousel-slide">
+                            <div class="slide-label">Proměna #5 — Pánský střih</div>
+                            <div class="image-container">
+                                <img class="img-before" src="assets/before.png" alt="Před proměnou">
+                                <div class="img-after-wrapper">
+                                    <img class="img-after" src="assets/after.png" alt="Po proměně">
+                                </div>
+                                <div class="slider-handle">
+                                    <span class="handle-arrow left">‹</span>
+                                    <span class="handle-arrow right">›</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Carousel Controls -->
+                    <button class="carousel-btn prev" id="carouselPrev" aria-label="Předchozí">&#8249;</button>
+                    <button class="carousel-btn next" id="carouselNext" aria-label="Další">&#8250;</button>
+
+                    <!-- Dot Indicators -->
+                    <div class="carousel-dots">
+                        <span class="dot active" data-index="0"></span>
+                        <span class="dot" data-index="1"></span>
+                        <span class="dot" data-index="2"></span>
+                        <span class="dot" data-index="3"></span>
+                        <span class="dot" data-index="4"></span>
                     </div>
                 </div>
             </div>
         </section>
+
 
         <!-- Gallery Section -->
         <section id="portfolio" class="portfolio">
@@ -330,27 +413,46 @@
 
     <!-- JavaScript for Interactive Features -->
     <script>
-        // Before & After Slider Logic
-        const slider = document.querySelector('.comparison-slider');
-        if (slider) {
-            const container = slider.querySelector('.image-container');
-            const afterImg = slider.querySelector('.img-after-wrapper');
-            const handle = slider.querySelector('.slider-handle');
+        // Carousel Logic
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.dot');
+        let current = 0;
 
-            const moveSlider = (e) => {
+        function goToSlide(index) {
+            slides[current].classList.remove('active');
+            dots[current].classList.remove('active');
+            current = (index + slides.length) % slides.length;
+            slides[current].classList.add('active');
+            dots[current].classList.add('active');
+            // Reset all sliders in new slide to 50%
+            initSlider(slides[current]);
+        }
+
+        document.getElementById('carouselPrev').addEventListener('click', () => goToSlide(current - 1));
+        document.getElementById('carouselNext').addEventListener('click', () => goToSlide(current + 1));
+        dots.forEach(dot => dot.addEventListener('click', () => goToSlide(+dot.dataset.index)));
+
+        // Before & After Slider Logic (works per-slide)
+        function initSlider(slide) {
+            const container = slide.querySelector('.image-container');
+            const afterImg = slide.querySelector('.img-after-wrapper');
+            const handle = slide.querySelector('.slider-handle');
+
+            // Reset position
+            afterImg.style.width = '50%';
+            handle.style.left = '50%';
+
+            container.onmousemove = container.ontouchmove = (e) => {
                 let xPos = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
                 let rect = container.getBoundingClientRect();
-                let position = ((xPos - rect.left) / rect.width) * 100;
-                
-                if (position >= 0 && position <= 100) {
-                    afterImg.style.width = `${position}%`;
-                    handle.style.left = `${position}%`;
-                }
+                let pos = Math.min(Math.max(((xPos - rect.left) / rect.width) * 100, 0), 100);
+                afterImg.style.width = `${pos}%`;
+                handle.style.left = `${pos}%`;
             };
-
-            container.addEventListener('mousemove', moveSlider);
-            container.addEventListener('touchmove', moveSlider);
         }
+
+        // Init slider for the first slide
+        slides.forEach(slide => initSlider(slide));
 
         // Reveal on Scroll Animations
         const revealElements = document.querySelectorAll('.reveal');
@@ -363,6 +465,7 @@
         }, { threshold: 0.1 });
 
         revealElements.forEach(el => revealObserver.observe(el));
+
     </script>
 </body>
 </html>
