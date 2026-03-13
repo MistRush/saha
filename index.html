@@ -35,13 +35,13 @@
                 <span class="logo-text">SAMARA HAIR <span class="text-accent">SAHA</span></span>
             </div>
             <ul class="nav-links">
-                <li><a href="#home">Domů</a></li>
+                <li><a href="#about">O mně</a></li>
                 <li><a href="#services">Služby</a></li>
+                <li><a href="#transformations">Proměny</a></li>
                 <li><a href="#portfolio">Galerie</a></li>
-
-
-                <li><a href="#faq">Časté dotazy</a></li>
+                <li><a href="#faq">FAQ</a></li>
                 <li><a href="#contact">Kontakt</a></li>
+
             </ul>
 
             <div class="nav-cta">
@@ -255,5 +255,43 @@
             <p>Vytvořeno s péčí pro lokální řemeslo.</p>
         </div>
     </footer>
+
+    <!-- JavaScript for Interactive Features -->
+    <script>
+        // Before & After Slider Logic
+        const slider = document.querySelector('.comparison-slider');
+        if (slider) {
+            const container = slider.querySelector('.image-container');
+            const afterImg = slider.querySelector('.img-after-wrapper');
+            const handle = slider.querySelector('.slider-handle');
+
+            const moveSlider = (e) => {
+                let xPos = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                let rect = container.getBoundingClientRect();
+                let position = ((xPos - rect.left) / rect.width) * 100;
+                
+                if (position >= 0 && position <= 100) {
+                    afterImg.style.width = `${position}%`;
+                    handle.style.left = `${position}%`;
+                }
+            };
+
+            container.addEventListener('mousemove', moveSlider);
+            container.addEventListener('touchmove', moveSlider);
+        }
+
+        // Reveal on Scroll Animations
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+    </script>
 </body>
 </html>
+
