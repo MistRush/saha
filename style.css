@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 :root {
     /* Color Palette - Modern Local */
     --color-primary: #1B3022; /* Deep Forest Green */
