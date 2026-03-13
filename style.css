@@ -554,8 +554,9 @@ nav {
     transform: translateY(-50%) scale(1.1);
 }
 
-.carousel-btn.prev { left: -60px; }
-.carousel-btn.next { right: -60px; }
+.carousel-btn.prev { left: -70px; }
+.carousel-btn.next { right: -70px; }
+
 
 
 .carousel-dots {
