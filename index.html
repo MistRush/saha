@@ -417,22 +417,46 @@
         const slides = document.querySelectorAll('.carousel-slide');
         const dots = document.querySelectorAll('.dot');
         let current = 0;
+        let isMoving = false;
 
         function goToSlide(index) {
+            if (isMoving) return;
+            isMoving = true;
+
             slides[current].classList.remove('active');
             dots[current].classList.remove('active');
+            
             current = (index + slides.length) % slides.length;
+            
             slides[current].classList.add('active');
             dots[current].classList.add('active');
-            // Reset all sliders in new slide to 50%
+            
             initSlider(slides[current]);
+            
+            setTimeout(() => {
+                isMoving = false;
+            }, 500);
         }
 
         document.getElementById('carouselPrev').addEventListener('click', () => goToSlide(current - 1));
         document.getElementById('carouselNext').addEventListener('click', () => goToSlide(current + 1));
         dots.forEach(dot => dot.addEventListener('click', () => goToSlide(+dot.dataset.index)));
 
-        // Before & After Slider Logic (works per-slide)
+        // Form Submission Feedback
+        const bookingForm = document.querySelector('.booking-form');
+        if (bookingForm) {
+            bookingForm.onsubmit = (e) => {
+                e.preventDefault();
+                const container = bookingForm.parentElement;
+                container.innerHTML = `
+                    <div class="form-success reveal active">
+                        <span class="success-icon">✔️</span>
+                        <h3>Děkuji!</h3>
+                        <p>Vaše údaje jsem přijala. Ozvu se vám hned, jak to bude možné.</p>
+                    </div>
+                `;
+            };
+        }
         function initSlider(slide) {
             const container = slide.querySelector('.image-container');
             const afterImg = slide.querySelector('.img-after-wrapper');
